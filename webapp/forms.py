@@ -9,3 +9,4 @@ class MenuItemForm(forms.ModelForm):
         widgets = {
             'Description': forms.Textarea(attrs={'rows': 3})
         }
+        
