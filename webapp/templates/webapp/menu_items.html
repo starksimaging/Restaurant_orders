@@ -1,0 +1,27 @@
+{% extends 'webapp/base.html' %}
+{% block content %}
+<h2>Menu Items</h2>
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Description</th>e
+        <th>Image</th>
+    </tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item.name }}</td>
+        <td>${{ item.price }}</td>
+        <td>{{ item.description }}</td>
+        <td>
+            {% if item.image %}
+            <img src="{{ item.image.url }}" style="max-width: 100px;">
+            <img src="{{  item.image.url }}" alt="{{ item.name }}" width="100">
+            {% else %}
+                No Image
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
