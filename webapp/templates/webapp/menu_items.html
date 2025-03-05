@@ -13,6 +13,10 @@
                 <img src="https://via.placeholder.com/300" class="card-img-top" alt="No Image Available">
                 {% endif %}
                 <div class="card-body">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'delete_menu_item' item.id %}" class="btn btn-danger">Delete</a>
+                    <a href="{% url 'edit_menu_item' item.id %}" class="btn btn-warning">Edit</a>
+                    {% endif %}
                     <h5 class="card-title">{{ item.name }}</h5>
                     <p class="card-text">{{ item.description }}</p>
                     <p class="card-text"><strong>Price:</strong> ${{ item.price }}</p>
