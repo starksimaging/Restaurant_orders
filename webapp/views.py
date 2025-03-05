@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import MenuItem
+from .models import MenuItem, CartItem
 from .forms import MenuItemForm
 from django.shortcuts import get_object_or_404
 
@@ -56,3 +56,31 @@ def edit_menu_item(request, item_id):
     else:
         form = MenuItemForm(instance=item)
     return render(request, 'webapp/edit_menu_item.html', {'form': form})
+
+# Shopping cart view and logic
+@login_required
+def add_to_cart(request, item_id):
+    menu_item = get_object_or_404(MenuItem, id=item_id)
+    cart_item, created = CartItem.objects.get_or_create(user=request.user, menu_item=menu_item)
+
+    if not created:
+        cart_item.quantity = +1
+        cart_item.save()
+
+    return redirect('view_cart')
+
+#This function is to view the cart
+@login_required
+def view_cart(request):
+    cart_items = CartItem.objects.filter(user=request.user)
+    total_price = sum(item.subtotal() for item in cart_items)
+
+    return render(request, 'webapp/view_cart.html', {'cart_items': cart_items, 'total_price': total_price})
+
+
+#This function is to remove items from the cart
+@login_required
+def remove_from_cart(request, item_id):
+    cart_item = get_object_or_404( CartItem, user=request.user, menu_item_id=item_id)
+    cart_item.delete()
+    return redirect('view_cart')

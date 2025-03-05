@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class MenuItem(models.Model):
@@ -9,3 +10,15 @@ class MenuItem(models.Model):
     
     def __str__(self):
         return self.name
+    
+# Shopping Cart
+class CartItem(models.Model):
+    user = models.ForeignKey(User,  on_delete=models.CASCADE)
+    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    quantity = models.PositiveBigIntegerField(default=1)
+
+    def subtotal(self):
+        return self.menu_item.price * self.quantity
+    
+    def __str__(self):
+        return f"{self.quantity} * {self.menu_item.name} ({self.user.username})"
