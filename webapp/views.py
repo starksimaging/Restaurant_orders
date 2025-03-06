@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from .models import MenuItem, CartItem
 from .forms import MenuItemForm
 from django.shortcuts import get_object_or_404
+from .forms import UserRegisterForm
+from django.contrib.auth import login
 
 # Create your views here.
 def menu_items(request):
@@ -84,3 +86,16 @@ def remove_from_cart(request, item_id):
     cart_item = get_object_or_404( CartItem, user=request.user, menu_item_id=item_id)
     cart_item.delete()
     return redirect('view_cart')
+
+# User Registration View
+
+def register(request):
+    if request.method == "POST":
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Log in the user after successful registration
+            return redirect('menu_items')  # Redirect to the menu page after registration
+    else:
+        form = UserRegisterForm()
+    return render(request, 'webapp/register.html', {'form': form}) # FIxed there was an indentation problem here
