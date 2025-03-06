@@ -6,9 +6,11 @@ from .forms import MenuItemForm
 from django.shortcuts import get_object_or_404
 from .forms import UserRegisterForm
 from django.contrib.auth import login
+from django.contrib import messages
+
 
 # Create your views here.
-# @login_required
+# @login_required commented out unless you want to restrict access to the menu items to only logged in users
 def menu_items(request):
     items = MenuItem.objects.all()
     return render(request, 'webapp/menu_items.html', {'items': items})
@@ -97,7 +99,10 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)  # Log in the user after successful registration
-            return redirect('home')   # Redirect to the home page after registration
+            return redirect('home')  # Redirect to home page after registration
+        else:
+            messages.error(request, "Registration failed. Please check your details.")
     else:
         form = UserRegisterForm()
-    return render(request, 'webapp/register.html', {'form': form}) # FIxed there was an indentation problem here
+    
+    return render(request, 'webapp/register.html', {'form': form})
