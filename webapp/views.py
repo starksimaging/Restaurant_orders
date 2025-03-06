@@ -7,7 +7,8 @@ from django.shortcuts import get_object_or_404
 from .forms import UserRegisterForm
 from django.contrib.auth import login
 from django.contrib import messages
-
+from .forms import CheckoutForm
+from .models import CartItem, Order
 
 # Create your views here.
 # @login_required commented out unless you want to restrict access to the menu items to only logged in users
@@ -106,3 +107,25 @@ def register(request):
         form = UserRegisterForm()
     
     return render(request, 'webapp/register.html', {'form': form})
+
+
+# Checkout view
+@login_required
+def checkout(request):
+    cart_items = CartItem.objects.filter(user=request.user)
+    total_price = sum(item.subtotal() for item in cart_items)
+
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            
+            # Create Order
+            order = Order.objects.create(user=request.user, total_price=total_price)
+
+            # Clear the cart
+            cart_items.delete()
+
+            return render(request, 'webapp/checkout_success.html', {'order': order})
+    else:
+        form = CheckoutForm()
+    return render(request, 'webapp/checkout.html', {'form': form, 'total_price': total_price})

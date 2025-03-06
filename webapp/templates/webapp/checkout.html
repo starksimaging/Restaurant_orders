@@ -1,0 +1,12 @@
+{% extends 'webapp/base.html' %}
+
+{% block content %}
+    <h2>Checkout</h2>
+    <p>Total: ${{ total_price }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Complete Purchase</button>
+    </form>
+{% endblock %}
