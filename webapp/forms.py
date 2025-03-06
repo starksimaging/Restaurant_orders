@@ -6,9 +6,10 @@ from django.contrib.auth.forms import UserCreationForm
 class MenuItemForm(forms.ModelForm):
     class Meta:
         model = MenuItem
-        fields = ['name', 'price', 'description', 'image'] # Add 'image' to the list of fields
+        fields = ['name', 'price', 'description', 'image', 'preparation_time'] # Add 'image' to the list of fields
         widgets = {
-            'Description': forms.Textarea(attrs={'rows': 3})
+            'Description': forms.Textarea(attrs={'rows': 3}),
+            'preparation_time': forms.NumberInput(attrs={'min': 1, 'step': 1}),
         }
         
 

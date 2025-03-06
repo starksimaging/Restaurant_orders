@@ -5,5 +5,6 @@
     <p>Your order has been placed successfully.</p>
     <p>Order ID: {{ order.id }}</p>
     <p>Total Paid: ${{ order.total_price }}</p>
+    <p><strong>Estimated Pickup Time:</strong> {{ order.estimated_ready_time|date:"F j, Y, g:i A" }}</p>
     <a href="{% url 'menu_items' %}" class="btn btn-primary">Continue Shopping</a>
 {% endblock %}

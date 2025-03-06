@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.utils.timezone import now, timedelta, localtime
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import MenuItem, CartItem
@@ -115,12 +116,22 @@ def checkout(request):
     cart_items = CartItem.objects.filter(user=request.user)
     total_price = sum(item.subtotal() for item in cart_items)
 
+    if not cart_items:
+        messages.error(request, "Your cart is empty.")
+        return redirect('view_cart')
+
+    max_prep_time = max((item.menu_item.preparation_time for item in cart_items), default=10)
+    estimated_ready_time = localtime(now()) + timedelta(minutes=max_prep_time)
+
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            
-            # Create Order
-            order = Order.objects.create(user=request.user, total_price=total_price)
+            # Create an order
+            order = Order.objects.create(
+                user=request.user,
+                total_price=total_price,
+                estimated_ready_time=estimated_ready_time
+            )
 
             # Clear the cart
             cart_items.delete()
@@ -128,4 +139,5 @@ def checkout(request):
             return render(request, 'webapp/checkout_success.html', {'order': order})
     else:
         form = CheckoutForm()
-    return render(request, 'webapp/checkout.html', {'form': form, 'total_price': total_price})
+
+    return render(request, 'webapp/checkout.html', {'total_price': total_price, 'estimated_ready_time': estimated_ready_time, 'form': form})
