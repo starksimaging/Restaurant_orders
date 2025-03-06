@@ -13,7 +13,7 @@
                 <img src="https://via.placeholder.com/300" class="card-img-top" alt="No Image Available">
                 {% endif %}
                 <div class="card-body">
-                    {% if user.is_authenticated %}
+                    {% if user.is_staff %}
                     <a href="{% url 'delete_menu_item' item.id %}" class="btn btn-danger">Delete</a>
                     <a href="{% url 'edit_menu_item' item.id %}" class="btn btn-warning">Edit</a>
                     <!-- Add to Cart Button -->

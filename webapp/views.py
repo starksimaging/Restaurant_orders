@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from .models import MenuItem, CartItem
 from .forms import MenuItemForm
 from django.shortcuts import get_object_or_404
@@ -7,6 +8,7 @@ from .forms import UserRegisterForm
 from django.contrib.auth import login
 
 # Create your views here.
+# @login_required
 def menu_items(request):
     items = MenuItem.objects.all()
     return render(request, 'webapp/menu_items.html', {'items': items})
@@ -15,7 +17,7 @@ def menu_items(request):
 def home(request):
     return render(request, 'webapp/home.html')
 
-@login_required
+@staff_member_required
 def add_menu_item(request):
     if request.method == 'POST':
         form = MenuItemForm(request.POST, request.FILES) # Handle file uploads
@@ -27,7 +29,7 @@ def add_menu_item(request):
 
         return render(request, 'webapp/add_menu_item.html', {'form': form})
 
-@login_required
+@staff_member_required
 def delete_menu_item(request, item_id):
     # Ensure item_id is an integer
     try:
@@ -46,7 +48,7 @@ def delete_menu_item(request, item_id):
 
 
 # Add this function to edit menu items
-@login_required
+@staff_member_required
 def edit_menu_item(request, item_id):
     item = get_object_or_404(MenuItem, id=item_id)
 
@@ -95,7 +97,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)  # Log in the user after successful registration
-            return redirect('menu_items')  # Redirect to the menu page after registration
+            return redirect('home')   # Redirect to the home page after registration
     else:
         form = UserRegisterForm()
     return render(request, 'webapp/register.html', {'form': form}) # FIxed there was an indentation problem here
