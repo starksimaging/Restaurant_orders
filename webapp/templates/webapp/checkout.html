@@ -3,25 +3,29 @@
     <h2>Checkout</h2>
     <p>Total: ${{ total_price }}</p>
 
-    <form method="post" id="payment-form">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="card-number">Card Number</label>
-            <input type="text" id="card-number" name="card_number" class="form-control" maxlength="19" placeholder="XXXX XXXX XXXX XXXX" required>
-        </div>
+    <div class="form-wrapper">
+        <div class="form-container">
+            <form method="post" id="payment-form">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="card-number">Card Number</label>
+                    <input type="text" id="card-number" name="card_number" class="form-control" maxlength="19" placeholder="XXXX XXXX XXXX XXXX" required>
+                </div>
 
-        <div class="mb-3">
-            <label for="expiration-date">Expiration Date (MM/YY)</label>
-            <input type="text" id="expiration-date" name="expiration_date" class="form-control" maxlength="5" placeholder="MM/YY" required>
-        </div>
+                <div class="mb-3">
+                    <label for="expiration-date">Expiration Date (MM/YY)</label>
+                    <input type="text" id="expiration-date" name="expiration_date" class="form-control" maxlength="5" placeholder="MM/YY" required>
+                </div>
 
-        <div class="mb-3">
-            <label for="cvv">CVV</label>
-            <input type="text" id="cvv" name="cvv" class="form-control" maxlength="4" placeholder="CVV" required>
-        </div>
+                <div class="mb-3">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" name="cvv" class="form-control" maxlength="4" placeholder="CVV" required>
+                </div>
 
-        <button type="submit" class="btn btn-success">Complete Purchase</button>
-    </form>
+                <button type="submit" class="btn btn-success">Complete Purchase</button>
+            </form>
+        </div>
+    </div>
 
     <script>
         // Mask credit card number input

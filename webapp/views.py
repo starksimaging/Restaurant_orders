@@ -10,7 +10,8 @@ from django.contrib.auth import login
 from django.contrib import messages
 from .forms import CheckoutForm
 from .models import CartItem, Order
-
+from django.utils.timezone import make_aware
+from datetime import datetime
 # Create your views here.
 # @login_required commented out unless you want to restrict access to the menu items to only logged in users
 def menu_items(request):
@@ -20,7 +21,7 @@ def menu_items(request):
 
 def home(request):
     return render(request, 'webapp/home.html')
-
+# Add this function to add menu items
 @staff_member_required
 def add_menu_item(request):
     if request.method == 'POST':
@@ -32,7 +33,7 @@ def add_menu_item(request):
         form = MenuItemForm()
 
         return render(request, 'webapp/add_menu_item.html', {'form': form})
-
+# Add this function to delete menu items
 @staff_member_required
 def delete_menu_item(request, item_id):
     # Ensure item_id is an integer
@@ -121,7 +122,8 @@ def checkout(request):
         return redirect('view_cart')
 
     max_prep_time = max((item.menu_item.preparation_time for item in cart_items), default=10)
-    estimated_ready_time = localtime(now()) + timedelta(minutes=max_prep_time)
+    current_time = make_aware(datetime.now())
+    estimated_ready_time = current_time + timedelta(minutes=max_prep_time)
 
     if request.method == 'POST':
         form = CheckoutForm(request.POST)

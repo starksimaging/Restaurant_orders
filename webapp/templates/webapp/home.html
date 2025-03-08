@@ -1,7 +1,34 @@
+<!-- 
+
+This template extends the base template 'webapp/base.html' and defines the content block for the home page of Crispy Cluck’s Fried Chicken website.
+
+Sections:
+- Hero Section: A full-width section with a background image, centered text, and a call-to-action button.
+    - Container: Centers the content within the hero section.
+    - Heading: Displays the main welcome message.
+    - Paragraph: Provides a brief description of the restaurant.
+    - Button: Links to the menu items page.
+-->
 {% extends 'webapp/base.html' %}
 
 {% block content %}
-    <h2>Welcome to Crispy Cluck’s Fried Chicken!</h2>
-    <p>Browse our menu and add delicious items.</p>
-    <a href="{% url 'menu_items' %}" class="btn btn-primary">View Menu</a>
+<div class="hero-section d-flex align-items-center justify-content-center text-white">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold">Welcome to Crispy Cluck’s Fried Chicken!</h1>
+        <p class="lead">Delicious, crispy, and always fresh!</p>
+        <a href="{% url 'menu_items' %}" class="btn btn-lg btn-primary">View Menu</a>
+    </div>
+</div>
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
